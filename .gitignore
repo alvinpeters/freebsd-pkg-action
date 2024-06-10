@@ -1,0 +1,6 @@
+# Ignore IDEA files
+/.idea/
+/testing/
+
+# Ignore output files, just in case
+/output/

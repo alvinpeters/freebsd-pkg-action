@@ -1,0 +1,38 @@
+# Disable unused variable and return masking error
+# shellcheck disable=SC2155,SC2034
+# Working directory
+readonly WORK_DIR="$(dirname "${0}")"
+# Program name
+readonly SCRIPT_NAME="$(basename "${0}")"
+
+# Do not write to stdout. stdout is reserved for GITHUB_OUTPUT
+# Print to stdout
+info() {
+  >&2 echo "[${SCRIPT_NAME}] INFO: ${*}"
+}
+
+# Print to stderr
+warn() {
+  >&2 echo "[${SCRIPT_NAME}] WARN: ${*}"
+}
+
+# Exit the script
+panic() {
+  # Output something if there are parameters.
+  if [ -n "${*}" ]; then
+    >&2 echo "[${SCRIPT_NAME}] ERROR: ${*}"
+  else
+    >&2 echo "[${SCRIPT_NAME}] ERROR: Script panicked"
+  fi
+  exit 1
+}
+
+# Exit with error if the parameters are empty.
+check_var() {
+  for var in "$@"; do
+    if [ -z "${!var}" ]; then
+      panic "Variable \$${var} is empty"
+    fi
+  done
+  return 0
+}
